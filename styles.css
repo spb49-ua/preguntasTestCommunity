@@ -1,0 +1,414 @@
+body {
+  position: relative;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+
+:root {
+  --bg-color: #f5f5f5;
+  --text-color: #333;
+  --app-bg-color: white;
+  --app-shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme {
+  --bg-color: #222;
+  --text-color: white;
+  --app-bg-color: #333;
+  --app-shadow-color: rgba(255, 255, 255, 0.1);
+}
+
+#app {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+  background-color: var(--app-bg-color);
+  box-shadow: 0 4px 6px var(--app-shadow-color), 0 1px 3px rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+button {
+  margin-top: 1em;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#opciones {
+  text-align: left;
+  display: inline-block;
+  margin-top: 1em;
+}
+
+input[type="radio"] {
+  margin-right: 8px;
+}
+
+@media (max-width: 767px) {
+  pre, code {
+    font-size: 12px; /* Ajusta el tamaño del texto del código a un valor que sea legible en móviles */
+    line-height: 1.4; /* Aumenta el espacio entre líneas para mejorar la legibilidad */
+  }
+
+  /* Asegúrate de que el código no exceda el ancho de pantalla y sea desplazable */
+  pre {
+    overflow-x: scroll; /* Cambiar a 'scroll' si se prefiere ver la barra de desplazamiento */
+    white-space: pre; /* Mantiene los espacios y saltos de línea del código */
+    word-break: break-all; /* Permite que las palabras largas se rompan y pasen a la línea siguiente */
+    margin: 10px 0; /* Ajusta el margen para dar espacio alrededor del bloque de código */
+  }
+  
+  #pregunta {
+    font-size: 0.75em; /* Reduce aún más el tamaño del texto si es necesario */
+  }
+  #app {
+    padding: 10px; /* Reduce el padding para dar más espacio al contenido */
+  }
+  #opciones label span {
+    font-size: 0.75em; /* Ajusta el tamaño del texto */
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+#theme-toggle {
+    margin-right: 20px;
+    background-color: transparent; /* Elimina el color de fondo */
+    border: none; /* Elimina el borde */
+    padding: 0; /* Elimina el padding */
+    font-size: 1.5em; /* Cambia el tamaño del ícono */
+    color: var(--text-color); /* Cambia el color del ícono */
+  }
+  
+  #theme-toggle:hover {
+    background-color: transparent; /* Mantiene el fondo transparente al pasar el cursor sobre el botón */
+    color: #007bff; /* Cambia el color del ícono al pasar el cursor sobre el botón */
+  }
+  
+
+.light-mode {
+  font-family: "Arial", sans-serif;
+}
+
+.dark-mode {
+  font-family: "Arial", sans-serif;
+}
+
+span.correct {
+  background-color: rgba(0, 255, 0, 0.3);
+  padding: 0.25em 0.5em;
+  border-radius: 5px;
+  margin: 0.25em 0;
+}
+
+span.incorrect {
+  background-color: rgba(255, 0, 0, 0.3);
+  padding: 0.25em 0.5em;
+  border-radius: 5px;
+  margin: 0.25em 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between; /* Modifique esta línea */
+    align-items: center;
+    background-color: var(--app-bg-color);
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px var(--app-shadow-color), 0 1px 3px rgba(0, 0, 0, 0.08);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }  
+
+  #github-link {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+  }
+  
+  #github-icon {
+    width: 32px;
+    height: 32px;
+    display: block;
+  }
+  
+  
+
+  #asignatura-nombre {
+    margin: 0;
+    text-align: center;
+    flex-grow: 1;
+    padding-left: 10px;
+  }
+  
+
+header {
+    align-items: flex-start;
+  }
+  
+  #github-link {
+    margin-top: 4px;
+  }
+  
+  #theme-toggle {
+    margin-left: auto;
+    margin-top: 4px;
+    padding: 0;
+    font-size: 1.5em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .github-link {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 8px;
+  }
+  
+  .github-link {
+    margin-right: 8px;
+    padding: 8px;
+  }
+
+  .contador {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.5); /* Un fondo semitransparente */
+    color: #FFFFFF;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 1000; /* Asegura que el contador esté por encima de otros elementos */
+  }
+  
+  .bottom-left {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    font-size: 16px;
+    color: #FFFFFF;
+    background-color: rgba(0, 0, 0, 0.5); /* Un fondo semitransparente */
+    padding: 5px;
+    border-radius: 3px;
+  }
+  
+  label span {
+    display: inline-flex;
+    max-width: 85%;
+    text-align: left;
+    margin-bottom: 5px;
+  }
+  
+  #main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#resumenBtn {
+    display: block;  /* puedes cambiar esto a "none" si quieres esconder el botón al inicio */
+}
+
+#copyButton {
+  position: absolute; /* Cambiar a posición absoluta para mover el botón de copiar */
+  top: 10px; /* Ajustar la posición superior e derecha para mover el botón a la esquina superior derecha */
+  right: 10px;
+  font-size: 1.5em; /* Cambiar el tamaño del ícono */
+  padding: 5px; /* Ajustar el padding */
+  background: none; /* Remover el color de fondo */
+  border: none; /* Remover el borde */
+  cursor: pointer; /* Cambiar el cursor a pointer */
+  color: var(--text-color); /* Cambiar el color del ícono al color de texto principal */
+  opacity: 0.5; /* Hacerlo más discreto */
+}
+
+#copyButton:hover {
+  opacity: 1; /* Cambiar la opacidad al pasar el cursor sobre el botón */
+}
+
+pre {
+  background-color: #f3f3f3; /* color de fondo para el bloque de código */
+  border: 1px solid #ccc; /* borde del bloque de código */
+  border-radius: 5px; /* esquinas redondeadas */
+  padding: 10px; /* espacio interior */
+  overflow-x: auto; /* desplazamiento horizontal si el bloque es demasiado ancho */
+  white-space: pre-wrap;
+  font-family: 'Courier New', Courier, monospace; /* tipo de letra para código */
+  margin-bottom: 10px; /* espacio después del bloque de código */
+  word-wrap: break-word;
+}
+
+pre, code {
+  overflow-x: auto; /* Asegura que haya desplazamiento horizontal si es necesario */
+  max-width: 100%; /* Asegura que el bloque de código no sea más ancho que su contenedor */
+  white-space: pre;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85em;
+}
+
+code {
+  overflow-wrap: break-word;
+}
+
+.group-left,
+.group-right {
+  display: flex;
+  gap: 10px; /* Espacio entre botones */
+  flex: 1;
+}
+
+/* Estilos para el separador vertical */
+.separator {
+  width: 1px;
+  height: 40px; /* Ajusta la altura según sea necesario */
+  background-color: #ccc; /* Color del separador */
+  margin: 0 20px; /* Espacio a ambos lados del separador */
+}
+
+.asignaturas {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px; /* Espacio inferior opcional */
+}
+
+.listaoculta {
+  flex-wrap: wrap; /* Permite que los elementos se envuelvan */
+  gap: 10px; /* Espacio entre botones */
+}
+
+/* Media queries para dispositivos móviles */
+@media (max-width: 767px) {
+  /* Ajuste general del contenedor */
+  #app {
+    width: 95%;
+    padding: 15px;
+    margin-top: 70px;
+  }
+  
+  /* Ajuste de la cabecera */
+  header {
+    padding: 10px;
+  }
+  
+  #asignatura-nombre {
+    font-size: 1rem;
+  }
+  
+  /* Organización de botones para móvil */
+  .asignaturas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .group-left, .group-right {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .separator {
+    width: 100%;
+    height: 1px;
+    margin: 10px 0;
+  }
+  
+  /* Tamaño y espaciado de botones */
+  button {
+    margin: 5px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    min-width: 80px;
+  }
+  
+  /* Ajustes para las sublistas */
+  .listaoculta {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  /* Ajustes para el texto de preguntas */
+  #pregunta, #opciones {
+    font-size: 0.9em;
+  }
+  
+  /* Mejorar la visualización de imágenes */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Ajustar botones inferiores */
+  #verificar, #volver {
+    width: 45%;
+    margin: 10px auto;
+  }
+  
+  /* Contador más visible */
+  .contador {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+}
+
+/* Media queries para dispositivos muy pequeños */
+@media (max-width: 480px) {
+  #asignatura-nombre {
+    font-size: 0.9rem;
+  }
+  
+  h1 {
+    font-size: 1.5em;
+  }
+  
+  h3 {
+    font-size: 1.2em;
+  }
+  
+  button {
+    font-size: 0.8em;
+    min-width: 70px;
+  }
+}
