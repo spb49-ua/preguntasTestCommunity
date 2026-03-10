@@ -139,7 +139,10 @@ document.getElementById("volver").addEventListener("click", () => {
   resetearContador();
   hideElement("total-preguntas"); // Oculta el elemento al hacer clic en "Volver"
   hideElement("contador"); // Oculta el elemento al hacer clic en "Volver"
-  document.getElementById("asignatura-nombre").innerText = "Preguntas y Respuestas";
+  document.getElementById("asignatura-nombre").innerHTML = `
+    <span class="title-main">Preguntas y Respuestas</span>
+    <span class="title-badge">Community Edition</span>
+  `;
   document.querySelector("#resumenBtn").style.display = "none";
   document.querySelector("#copyButton").style.display = "none";
 });
@@ -790,4 +793,5 @@ document.getElementById("copyButton").addEventListener("click", function() {
     console.error('Could not copy text: ', err);
   });
 });
+
 
