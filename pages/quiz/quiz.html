@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta charset="UTF-8" />
+        <title>Test • Community Edition</title>
+
+        <link rel="stylesheet" href="styles/styles.css" />
+        <link rel="stylesheet" href="styles/prism.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.css"
+            crossorigin="anonymous"
+        />
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.js" crossorigin="anonymous"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/contrib/auto-render.min.js"
+            crossorigin="anonymous"
+        ></script>
+    </head>
+    <body>
+        <header>
+            <h2 id="asignatura-nombre"><span class="title-main">Test en curso</span></h2>
+            <button id="theme-toggle" class="light-mode">&#9728;</button>
+        </header>
+
+        <div id="main-container">
+            <div id="app">
+                <button id="copyButton" class="copy-button" style="display: none">📋</button>
+
+                <div id="pregunta" style="text-align: left"></div>
+                <form id="opciones"></form>
+                <div id="resultado"></div>
+                <button id="verificar" class="hidden">Verificar</button>
+
+                <button id="volver" onclick="window.location.href = 'index.html'">Volver al Menú</button>
+            </div>
+
+            <div id="button-container">
+                <button id="resumenBtn" style="display: none">Resumen</button>
+            </div>
+        </div>
+
+        <script src="main.js"></script>
+        <div class="contador hidden" id="contador">Correctas: 0 / Preguntas: 0</div>
+        <div id="total-preguntas" class="bottom-left hidden"></div>
+        <script src="prism.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        { left: "$$", right: "$$", display: false }, // LaTeX inline
+                        { left: "\\[", right: "\\]", display: true }, // LaTeX display mode
+                    ],
+                });
+            });
+        </script>
+    </body>
+</html>

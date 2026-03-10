@@ -4,13 +4,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <meta charset="UTF-8" />
         <title>Preguntas y Respuestas • Community Edition</title>
-        <link rel="stylesheet" href="styles.css" />
-        <link href="prism.css" rel="stylesheet" />
+
+        <!-- Estilos -->
+        <link rel="stylesheet" href="styles/styles.css" />
+        <link rel="stylesheet" href="styles/prism.css" />
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.css"
             crossorigin="anonymous"
         />
+
+        <!-- Carga de KaTeX -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.js" crossorigin="anonymous"></script>
         <script
             src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/contrib/auto-render.min.js"
@@ -18,7 +22,9 @@
         ></script>
     </head>
     <body>
+        <!-- Cabecera -->
         <header>
+            <!-- Acceso directo al repositorio de GitHub -->
             <a href="https://github.com/spb49-ua/preguntasTestCommunity" class="github-link" target="_blank">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                     <path
@@ -27,95 +33,87 @@
                 </svg>
             </a>
 
+            <!-- Título -->
             <h2 id="asignatura-nombre">
                 <span class="title-main">Preguntas y Respuestas</span>
                 <span class="title-badge">Community Edition</span>
             </h2>
+
+            <!-- Botón para cambiar de tema -->
             <button id="theme-toggle" class="light-mode">&#9728;</button>
         </header>
+
+        <!-- Div del menú -->
         <div id="main-container">
             <div id="app">
-                <button
-                    id="copyButton"
-                    class="copy-button"
-                    style="display: none"
-                    aria-label="Copiar pregunta y respuestas"
-                >
-                    📋
-                </button>
                 <h1 id="app-title">Seleccione una asignatura</h1>
                 <div id="asignaturas-container">
                     <h3>Rama Software</h3>
                     <div class="asignaturas">
-                        <!-- Grupo de Asignaturas Izquierdas -->
                         <div class="group-left">
                             <button id="dca">DCA</button>
                             <!-- <button id="dca-NO-OFICIAL">DCA-NO-OFICIAL</button> -->
-                            <button id="MADS-NO-OFICIAL">MADS-NO-OFICIAL</button>
+                            <button id="MADS-NO-OFICIAL">MADS NO OFICIAL</button>
                             <!-- <button id="MADS-NO-OFICIAL-P1">MADS-NO-OFICIAL-P1</button> -->
                             <!-- <button id="MADS-NO-OFICIAL-P2">MADS-NO-OFICIAL-P2</button> -->
                         </div>
-
-                        <!-- Separador Vertical -->
                         <div class="separator"></div>
-
-                        <!-- Grupo de Asignaturas Derechas -->
                         <div class="group-right">
                             <button id="gcs">GCS</button>
                             <!-- <button id="gcsp1nooficial">GCS-P1-NO-OFICIAL</button> -->
                             <!-- <button id="gcsp1old">GCS-P1-old</button> -->
                             <!-- <button id="gcsp2old">GCS-P2-old</button> -->
-                            <button id="sds-no-oficial">SDS-NO-OFICIAL</button>
+                            <button id="sds-no-oficial">SDS NO OFICIAL</button>
                         </div>
                     </div>
 
                     <!-- Sublista para MADS (inicialmente oculta) -->
                     <div id="mads-sublist" style="display: none; margin-top: 10px">
-                        <h4>Asignaturas MADS</h4>
+                        <h4>Exámenes MADS</h4>
                         <div class="asignaturas listaoculta">
-                            <button id="MADS-NO-OFICIAL-P1">MADS-NO-OFICIAL-P1</button>
-                            <button id="MADS-NO-OFICIAL-P2">MADS-NO-OFICIAL-P2</button>
+                            <button id="MADS-NO-OFICIAL-P1">MADS NO OFICIAL P1</button>
+                            <button id="MADS-NO-OFICIAL-P2">MADS NO OFICIAL P2</button>
                         </div>
                     </div>
 
                     <!-- Sublista para DCA (inicialmente oculta) -->
                     <div id="dca-sublist" style="display: none; margin-top: 10px">
-                        <h4>Asignaturas DCA</h4>
+                        <h4>Exámenes DCA</h4>
                         <div class="asignaturas listaoculta">
-                            <button id="dca-oficial">DCA-OFICIAL</button>
-                            <button id="dca-NO-OFICIAL">DCA-NO-OFICIAL</button>
+                            <button id="dca-oficial">DCA OFICIAL</button>
+                            <button id="dca-NO-OFICIAL">DCA NO OFICIAL</button>
                         </div>
                     </div>
 
                     <!-- Sublista para GCS (inicialmente oculta) -->
                     <div id="gcs-sublist" style="display: none; margin-top: 10px">
-                        <h4>Asignaturas GCS</h4>
+                        <h4>Exámenes GCS</h4>
                         <div class="asignaturas listaoculta">
-                            <button id="gcsp1nooficial">GCS-P1-NO-OFICIAL-2025</button>
-                            <button id="gcsp1old">GCS-P1-old-2024</button>
-                            <button id="gcsp2old">GCS-P2-old-2024</button>
+                            <button id="gcsp1nooficial">GCS P1 NO OFICIAL 2025</button>
+                            <button id="gcsp1old">GCS P1 old 2024</button>
+                            <button id="gcsp2old">GCS P2 old 2024</button>
                         </div>
                     </div>
 
                     <!-- Sublista para SDS-NO-OFICIAL (inicialmente oculta) -->
                     <div id="sds-sublist" style="display: none; margin-top: 10px">
-                        <h4>Asignaturas SDS</h4>
+                        <h4>Exámenes SDS</h4>
                         <div class="asignaturas listaoculta">
-                            <button id="sdsfull">SDSFULL</button>
-                            <button id="sds01-presentacion">sds01-presentacion</button>
-                            <button id="sds02-introgo">sds02-introgo</button>
-                            <button id="sds03-introcripto">sds03-introcripto</button>
-                            <button id="sds04-aleatorios">sds04-aleatorios</button>
-                            <button id="sds05-flujo">sds05-flujo</button>
-                            <button id="sds06-bloque">sds06-bloque</button>
-                            <button id="sds07-hash">sds07-hash</button>
-                            <button id="sds08-publica">sds08-publica</button>
-                            <button id="sds09-transporte">sds09-transporte</button>
-                            <button id="sds10-ejercicios">sds10-ejercicios</button>
-                            <button id="sds11-malware">sds11-malware</button>
-                            <button id="sds12-ataques">sds12-ataques</button>
-                            <button id="sds13-wireless">sds13-wireless</button>
-                            <button id="sds14-recomendaciones">sds14-recomendaciones</button>
+                            <button id="sdsfull">SDS FULL</button>
+                            <button id="sds01-presentacion">sds01 presentacion</button>
+                            <button id="sds02-introgo">sds02 introgo</button>
+                            <button id="sds03-introcripto">sds03 introcripto</button>
+                            <button id="sds04-aleatorios">sds04 aleatorios</button>
+                            <button id="sds05-flujo">sds05 flujo</button>
+                            <button id="sds06-bloque">sds06 bloque</button>
+                            <button id="sds07-hash">sds07 hash</button>
+                            <button id="sds08-publica">sds08 publica</button>
+                            <button id="sds09-transporte">sds09 transporte</button>
+                            <button id="sds10-ejercicios">sds10 ejercicios</button>
+                            <button id="sds11-malware">sds11 malware</button>
+                            <button id="sds12-ataques">sds12 ataques</button>
+                            <button id="sds13-wireless">sds13 wireless</button>
+                            <button id="sds14-recomendaciones">sds14 recomendaciones</button>
                         </div>
                     </div>
 
@@ -135,12 +133,12 @@
                         </div>
                     </div>
 
-                    <!-- Sublista para PPSS(inicialmente oculta) -->
+                    <!-- Sublista para PPSS (inicialmente oculta) -->
                     <div id="ppss-sublist" style="display: none; margin-top: 10px">
-                        <h4>Asignaturas PPSS</h4>
+                        <h4>Exámenes PPSS</h4>
                         <div class="asignaturas listaoculta">
-                            <button id="ppss-p1">PPSS-P1</button>
-                            <button id="ppss-p2">PPSS-P2</button>
+                            <button id="ppss-p1">PPSS P1</button>
+                            <button id="ppss-p2">PPSS P2</button>
                         </div>
                     </div>
 
@@ -166,36 +164,36 @@
                         </div>
                     </div>
 
-                    <!-- Sublista para ADA(inicialmente oculta) -->
+                    <!-- Sublista para ADA (inicialmente oculta) -->
                     <div id="ada-sublist" style="display: none; margin-top: 10px">
-                        <h4>Asignaturas ADA</h4>
+                        <h4>Exámenes ADA</h4>
                         <div class="asignaturas listaoculta">
-                            <button id="ada-p1">ada-p1</button>
-                            <button id="ada-p2">ada-p2</button>
-                            <button id="ada-full">ada-full</button>
+                            <button id="ada-p1">ada p1</button>
+                            <button id="ada-p2">ada p2</button>
+                            <button id="ada-full">ada full</button>
                         </div>
                     </div>
 
                     <!-- Sublista para AC (inicialmente oculta) -->
                     <div id="ac-sublist" style="display: none; margin-top: 10px">
-                        <h4>Asignaturas AC</h4>
+                        <h4>Exámenes AC</h4>
                         <div class="asignaturas listaoculta">
-                            <button id="ac_CP-F2">ac_CP-F2</button>
-                            <button id="ac_CP-F3">ac_CP-F3</button>
-                            <button id="ac_CT1-2">ac_CT1-2</button>
-                            <button id="ac_CT3-4">ac_CT3-4</button>
+                            <button id="ac_CP-F2">ac CP F2</button>
+                            <button id="ac_CP-F3">ac CP F3</button>
+                            <button id="ac_CT1-2">ac CT1 2</button>
+                            <button id="ac_CT3-4">ac CT3 4</button>
                         </div>
                     </div>
 
                     <!-- Sublista para REDES (inicialmente oculta) -->
                     <div id="redes-sublist" style="display: none; margin-top: 10px">
-                        <h4>Asignaturas REDES</h4>
+                        <h4>Exámenes REDES</h4>
                         <div class="asignaturas listaoculta">
-                            <button id="redes_full">redes_full</button>
-                            <button id="redesEnero2324">redesEnero2324</button>
-                            <button id="redesEnero2425">redesEnero2425</button>
-                            <button id="redesJulio2425">redesJulio2425</button>
-                            <button id="redesEnero2526">redesEnero2526</button>
+                            <button id="redes_full">redes full</button>
+                            <button id="redesEnero2324">redes Enero 23 24</button>
+                            <button id="redesEnero2425">redes Enero 24 25</button>
+                            <button id="redesJulio2425">redes Julio 24 25</button>
+                            <button id="redesEnero2526">redes Enero 25 26</button>
                         </div>
                     </div>
 
@@ -215,6 +213,28 @@
                 <button id="resumenBtn" style="display: none">Resumen</button>
             </div>
         </div>
+
+        <script>
+            document.getElementById("asignaturas-container").addEventListener("click", function (e) {
+                if (e.target.tagName === "BUTTON") {
+                    const idBoton = e.target.id;
+                    const sublist = document.getElementById(idBoton + "-sublist");
+
+                    if (sublist) {
+                        // Es un botón de categoría (ej. DCA), abrimos o cerramos su sublista
+                        const sublistas = document.querySelectorAll('[id$="-sublist"]');
+                        sublistas.forEach((sub) => {
+                            if (sub.id !== idBoton + "-sublist") sub.style.display = "none";
+                        });
+                        sublist.style.display = sublist.style.display === "none" ? "block" : "none";
+                    } else {
+                        // Es un examen, redirigimos a la zona de preguntas
+                        window.location.href = `quiz.html?asignatura=${idBoton}`;
+                    }
+                }
+            });
+        </script>
+
         <script src="main.js"></script>
         <div class="contador hidden" id="contador">Correctas: 0 / Preguntas: 0</div>
         <div id="total-preguntas" class="bottom-left hidden"></div>
