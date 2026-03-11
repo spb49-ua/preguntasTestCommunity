@@ -6,8 +6,8 @@
         <title>Preguntas y Respuestas • Community Edition</title>
 
         <!-- Estilos -->
-        <link rel="stylesheet" href="styles/styles.css" />
-        <link rel="stylesheet" href="styles/prism.css" />
+        <link rel="stylesheet" href="/resources/css/styles.css" />
+        <link rel="stylesheet" href="/resources/css/prism.css" />
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.0/katex.min.css"
@@ -34,7 +34,7 @@
             </a>
 
             <!-- Título -->
-            <h2 id="asignatura-nombre">
+            <h2 id="asignatura-nombre" onclick="window.location.href = '/'" style="cursor: pointer">
                 <span class="title-main">Preguntas y Respuestas</span>
                 <span class="title-badge">Community Edition</span>
             </h2>
@@ -53,7 +53,7 @@
                         <div class="group-left">
                             <button id="dca">DCA</button>
                             <!-- <button id="dca-NO-OFICIAL">DCA-NO-OFICIAL</button> -->
-                            <button id="MADS-NO-OFICIAL">MADS NO OFICIAL</button>
+                            <button id="mads">MADS NO OFICIAL</button>
                             <!-- <button id="MADS-NO-OFICIAL-P1">MADS-NO-OFICIAL-P1</button> -->
                             <!-- <button id="MADS-NO-OFICIAL-P2">MADS-NO-OFICIAL-P2</button> -->
                         </div>
@@ -63,7 +63,7 @@
                             <!-- <button id="gcsp1nooficial">GCS-P1-NO-OFICIAL</button> -->
                             <!-- <button id="gcsp1old">GCS-P1-old</button> -->
                             <!-- <button id="gcsp2old">GCS-P2-old</button> -->
-                            <button id="sds-no-oficial">SDS NO OFICIAL</button>
+                            <button id="sds">SDS NO OFICIAL</button>
                         </div>
                     </div>
 
@@ -122,11 +122,11 @@
                         <div class="group-left">
                             <button id="dss">DSS</button>
                             <button id="gpi">GPI</button>
-                            <button id="ic-p1">IC-P1</button>
+                            <button id="ic-p1">IC P1</button>
                         </div>
                         <div class="separator"></div>
                         <div class="group-right">
-                            <button id="taes-definitivo">TAES-DEFINITIVO-OLD</button>
+                            <button id="taes-definitivo">TAES DEFINITIVO OLD</button>
                             <button id="ppss">PPSS</button>
                             <!-- <button id="ppss-p1">PPSS-P1</button> -->
                             <!-- <button id="ppss-p2">PPSS-P2</button> -->
@@ -198,19 +198,10 @@
                     </div>
 
                     <h3>Primer Curso</h3>
-                    <div id="asignaturas">
+                    <div id="asignatura-centrada">
                         <button id="sti">STI</button>
                     </div>
                 </div>
-
-                <div id="pregunta" style="text-align: left"></div>
-                <form id="opciones"></form>
-                <div id="resultado"></div>
-                <button id="verificar" class="hidden">Verificar</button>
-                <button id="volver" class="hidden">Volver</button>
-            </div>
-            <div id="button-container">
-                <button id="resumenBtn" style="display: none">Resumen</button>
             </div>
         </div>
 
@@ -221,33 +212,19 @@
                     const sublist = document.getElementById(idBoton + "-sublist");
 
                     if (sublist) {
-                        // Es un botón de categoría (ej. DCA), abrimos o cerramos su sublista
+                        // Lógica de abrir/cerrar menú (se queda igual)
                         const sublistas = document.querySelectorAll('[id$="-sublist"]');
                         sublistas.forEach((sub) => {
                             if (sub.id !== idBoton + "-sublist") sub.style.display = "none";
                         });
                         sublist.style.display = sublist.style.display === "none" ? "block" : "none";
                     } else {
-                        // Es un examen, redirigimos a la zona de preguntas
-                        window.location.href = `quiz.html?asignatura=${idBoton}`;
+                        // REDIRECCIÓN A LA URL LIMPIA
+                        window.location.href = `/${idBoton}`;
                     }
                 }
             });
         </script>
-
-        <script src="main.js"></script>
-        <div class="contador hidden" id="contador">Correctas: 0 / Preguntas: 0</div>
-        <div id="total-preguntas" class="bottom-left hidden"></div>
-        <script src="prism.js"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                renderMathInElement(document.body, {
-                    delimiters: [
-                        { left: "$$", right: "$$", display: false }, // LaTeX inline
-                        { left: "\\[", right: "\\]", display: true }, // LaTeX display mode
-                    ],
-                });
-            });
-        </script>
+        <script src="/resources/js/main.js"></script>
     </body>
 </html>

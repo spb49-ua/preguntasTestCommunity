@@ -1,2 +1,5 @@
 .gitignore
 test.txt
+
+# Local Netlify folder
+.netlify

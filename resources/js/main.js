@@ -3,8 +3,24 @@ let preguntasCorrectas = 0;
 let archivoActual = "";
 
 async function cargarPreguntas(archivo) {
-    const response = await fetch("data/" + archivo);
+    const response = await fetch("/resources/data/" + archivo);
+
+    // 1. Comprobamos si el servidor nos dice explícitamente que no existe (Error 404)
+    if (!response.ok) {
+        throw new Error("Archivo no encontrado (404)");
+    }
+
     let preguntasTxt = await response.text();
+
+    // 2. Comprobamos si el servidor nos ha intentado engañar devolviendo código HTML
+    if (
+        preguntasTxt.trim().toLowerCase().startsWith("<!doctype html>") ||
+        preguntasTxt.trim().toLowerCase().startsWith("<html")
+    ) {
+        throw new Error("Se recibió una página web en lugar de las preguntas");
+    }
+
+    // Si todo está bien, limpiamos el texto como antes
     preguntasTxt = preguntasTxt.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
     return preguntasTxt;
 }
@@ -44,33 +60,38 @@ async function cargarMultiplesArchivos(archivos) {
     return todasLasPreguntas;
 }
 
-document.getElementById("resumenBtn").addEventListener("click", function () {
-    if (archivoActual === "SDSFULL") {
-        // Almacenamos la lista de archivos en sessionStorage para recuperarla en la página de resumen
-        sessionStorage.setItem(
-            "sdsfullArchivos",
-            JSON.stringify([
-                "sds01-presentacionPreguntas.txt",
-                "sds02-introgoPreguntas.txt",
-                "sds03-introcriptoPreguntas.txt",
-                "sds04-aleatoriosPreguntas.txt",
-                "sds05-flujoPreguntas.txt",
-                "sds06-bloquePreguntas.txt",
-                "sds07-hashPreguntas.txt",
-                "sds08-publicaPreguntas.txt",
-                "sds09-transportePreguntas.txt",
-                "sds10-ejerciciosPreguntas.txt",
-                "sds11-malwarePreguntas.txt",
-                "sds12-ataquesPreguntas.txt",
-                "sds13-wirelessPreguntas.txt",
-                "sds14-recomendacionesPreguntas.txt",
-            ]),
-        );
-        window.location.href = "resumen.html?preguntas=SDSFULL";
-    } else {
-        window.location.href = "resumen.html?preguntas=" + archivoActual;
-    }
-});
+const resumenBtn = document.getElementById("resumenBtn");
+if (resumenBtn) {
+    resumenBtn.addEventListener("click", function () {
+        // Cogemos la URL actual limpia (ej: "/sds-no-oficial")
+        const currentPath = window.location.pathname.replace(/\/$/, "");
+
+        if (archivoActual === "SDSFULL") {
+            sessionStorage.setItem(
+                "sdsfullArchivos",
+                JSON.stringify([
+                    "sds01-presentacionPreguntas.txt",
+                    "sds02-introgoPreguntas.txt",
+                    "sds03-introcriptoPreguntas.txt",
+                    "sds04-aleatoriosPreguntas.txt",
+                    "sds05-flujoPreguntas.txt",
+                    "sds06-bloquePreguntas.txt",
+                    "sds07-hashPreguntas.txt",
+                    "sds08-publicaPreguntas.txt",
+                    "sds09-transportePreguntas.txt",
+                    "sds10-ejerciciosPreguntas.txt",
+                    "sds11-malwarePreguntas.txt",
+                    "sds12-ataquesPreguntas.txt",
+                    "sds13-wirelessPreguntas.txt",
+                    "sds14-recomendacionesPreguntas.txt",
+                ]),
+            );
+        }
+
+        // Redirigimos a la nueva URL limpia: "/sds-no-oficial/resumen"
+        window.location.href = currentPath + "/resumen";
+    });
+}
 
 let preguntas = [];
 
@@ -94,46 +115,51 @@ function cerrarTodasLasSublistas() {
 }
 
 function iniciarAsignatura(archivo) {
-    resetAppState(); // Llama a resetAppState al iniciar una asignatura
+    resetAppState();
     document.getElementById("resumenBtn").style.display = "block";
     document.getElementById("copyButton").style.display = "block";
     archivoActual = archivo;
 
     const asignaturaNombre = archivo.split("Preguntas.txt")[0].toUpperCase();
-    document.getElementById("asignatura-nombre").innerText = asignaturaNombre;
+    document.querySelector("#asignatura-nombre .title-main").innerText = asignaturaNombre;
 
-    cargarPreguntas(archivo).then((preguntasTxt) => {
-        preguntas = preguntasTxt.split(/\n{2,}/).map((preguntaTxt) => {
-            const [pregunta, respuesta, ...opciones] = preguntaTxt.split("\n");
-            const respuestasCorrectasOriginal = respuesta.split(",").map((r) => parseInt(r.trim()));
+    cargarPreguntas(archivo)
+        .then((preguntasTxt) => {
+            preguntas = preguntasTxt.split(/\n{2,}/).map((preguntaTxt) => {
+                // ... (todo tu código interno del map se queda exactamente igual) ...
+                const [pregunta, respuesta, ...opciones] = preguntaTxt.split("\n");
+                const respuestasCorrectasOriginal = respuesta.split(",").map((r) => parseInt(r.trim()));
 
-            // Detectar duplicados
-            const respuestasUnicas = Array.from(new Set(respuestasCorrectasOriginal));
-            const hasDuplicates = respuestasCorrectasOriginal.length !== respuestasUnicas.length;
+                const respuestasUnicas = Array.from(new Set(respuestasCorrectasOriginal));
+                const hasDuplicates = respuestasCorrectasOriginal.length !== respuestasUnicas.length;
 
-            const opcionesMezcladas = shuffleArray([...opciones]);
-            const respuestasMezcladas = respuestasUnicas.map((r) => opcionesMezcladas.indexOf(opciones[r - 1]) + 1);
+                const opcionesMezcladas = shuffleArray([...opciones]);
+                const respuestasMezcladas = respuestasUnicas.map((r) => opcionesMezcladas.indexOf(opciones[r - 1]) + 1);
 
-            return {
-                pregunta,
-                respuestas: respuestasMezcladas,
-                opciones: opcionesMezcladas,
-                multiple: hasDuplicates || respuestasMezcladas.length > 1,
-            };
+                return {
+                    pregunta,
+                    respuestas: respuestasMezcladas,
+                    opciones: opcionesMezcladas,
+                    multiple: hasDuplicates || respuestasMezcladas.length > 1,
+                };
+            });
+
+            document.getElementById("total-preguntas").innerText = `Total: ${preguntas.length}`;
+            shuffle(preguntas);
+            mostrarPregunta();
+        })
+        .catch((error) => {
+            // AQUÍ ESTÁ LA PROTECCIÓN: Si falla la carga, redirigimos al menú principal (index.html)
+            console.warn("URL inválida o asignatura no encontrada:", error);
+            window.location.href = "/";
         });
-
-        document.getElementById("total-preguntas").innerText = `Total: ${preguntas.length}`;
-
-        shuffle(preguntas);
-        mostrarPregunta();
-    });
 
     hideElement("asignaturas-container");
     hideElement("app-title");
     showElement("verificar");
     showElement("volver");
-    showElement("total-preguntas"); // Muestra el elemento al seleccionar una asignatura
-    showElement("contador"); // Muestra el elemento al seleccionar una asignatura
+    showElement("total-preguntas");
+    showElement("contador");
 }
 
 let preguntaActual = 0;
@@ -324,7 +350,10 @@ function siguientePregunta() {
     document.getElementById("resultado").innerText = "";
 }
 
-document.getElementById("verificar").addEventListener("click", verificarRespuesta);
+const verificarBtn = document.getElementById("verificar");
+if (verificarBtn) {
+    verificarBtn.addEventListener("click", verificarRespuesta);
+}
 
 function toggleTheme() {
     const themeToggle = document.getElementById("theme-toggle");
@@ -332,18 +361,49 @@ function toggleTheme() {
 
     if (body.classList.contains("dark-theme")) {
         body.classList.remove("dark-theme");
-        themeToggle.innerHTML = "&#9728;"; // Sol
-        themeToggle.classList.remove("dark-mode");
-        themeToggle.classList.add("light-mode");
+        if (themeToggle) {
+            themeToggle.innerHTML = "&#9728;"; // Sol
+            themeToggle.classList.remove("dark-mode");
+            themeToggle.classList.add("light-mode");
+        }
+        // Guardamos la preferencia como "light"
+        localStorage.setItem("theme", "light");
     } else {
         body.classList.add("dark-theme");
-        themeToggle.innerHTML = "&#9790;"; // Luna
-        themeToggle.classList.remove("light-mode");
-        themeToggle.classList.add("dark-mode");
+        if (themeToggle) {
+            themeToggle.innerHTML = "&#9790;"; // Luna
+            themeToggle.classList.remove("light-mode");
+            themeToggle.classList.add("dark-mode");
+        }
+        // Guardamos la preferencia como "dark"
+        localStorage.setItem("theme", "dark");
     }
 }
 
-document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
+const themeBtn = document.getElementById("theme-toggle");
+if (themeBtn) {
+    themeBtn.addEventListener("click", toggleTheme);
+
+    function cargarTemaGuardado() {
+        const savedTheme = localStorage.getItem("theme");
+        const themeToggle = document.getElementById("theme-toggle");
+        const body = document.querySelector("body");
+
+        // Si el usuario tenía guardado el modo oscuro, lo aplicamos inmediatamente
+        if (savedTheme === "dark") {
+            body.classList.add("dark-theme");
+            if (themeToggle) {
+                themeToggle.innerHTML = "&#9790;"; // Luna
+                themeToggle.classList.remove("light-mode");
+                themeToggle.classList.add("dark-mode");
+            }
+        }
+        // Si era "light" o no hay nada guardado (primera vez), se queda el claro por defecto.
+    }
+
+    // Ejecutamos la función nada más cargar el script
+    cargarTemaGuardado();
+}
 
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
@@ -422,29 +482,34 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-document.getElementById("copyButton").addEventListener("click", function () {
-    const pregunta = document.getElementById("pregunta").innerText;
-    const opciones = Array.from(document.getElementById("opciones").getElementsByTagName("span")).map(
-        (e) => e.innerText,
-    );
-    const contenidoParaCopiar = pregunta + "\n\n" + "- " + opciones.join("\n- ");
-
-    navigator.clipboard.writeText(contenidoParaCopiar).then(
-        function () {
-            console.log("Copying to clipboard was successful!");
-        },
-        function (err) {
-            console.error("Could not copy text: ", err);
-        },
-    );
-});
+const copyBtn = document.getElementById("copyButton");
+if (copyBtn) {
+    copyBtn.addEventListener("click", function () {
+        const pregunta = document.getElementById("pregunta").innerText;
+        const opciones = Array.from(document.getElementById("opciones").getElementsByTagName("span")).map(
+            (e) => e.innerText,
+        );
+        const contenidoParaCopiar = pregunta + "\n\n" + "- " + opciones.join("\n- ");
+        navigator.clipboard.writeText(contenidoParaCopiar).then(
+            function () {
+                console.log("Copiado con éxito");
+            },
+            function (err) {
+                console.error("Error al copiar: ", err);
+            },
+        );
+    });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Leemos el parámetro de la URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const asignaturaId = urlParams.get("asignatura");
+    // Leemos la ruta de la URL (ej: "/dca-oficial")
+    const path = window.location.pathname;
 
-    if (asignaturaId) {
+    // Le quitamos la primera barra "/" para quedarnos solo con "dca-oficial"
+    const asignaturaId = path.substring(1).replace(/\/$/, ""); // El replace quita la barra final si la hubiera
+
+    // Si hay un ID y no estamos en la página principal, cargamos el quiz
+    if (asignaturaId && path !== "/" && path !== "/index.html") {
         cargarDesdeUrl(asignaturaId);
     }
 });

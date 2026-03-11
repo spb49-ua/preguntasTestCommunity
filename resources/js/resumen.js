@@ -1,114 +1,191 @@
-// resumen.js
-
-// Esta es una versión simplificada de tu función cargarPreguntas.
-// Puedes necesitar ajustarla según tus necesidades.
+// --- CARGA DE PREGUNTAS ---
 async function cargarPreguntas(archivo) {
-  const response = await fetch("data/" + archivo);
-  let preguntasTxt = await response.text();
-  preguntasTxt = preguntasTxt
-    .replace(/\r\n/g, "\n")
-    .replace(/\r/g, "\n")
-    .trim();
-  return preguntasTxt;
+    // Usamos la ruta absoluta igual que en main.js
+    const response = await fetch("/resources/data/" + archivo);
+
+    if (!response.ok) throw new Error("Archivo no encontrado (404)");
+
+    let preguntasTxt = await response.text();
+
+    if (
+        preguntasTxt.trim().toLowerCase().startsWith("<!doctype html>") ||
+        preguntasTxt.trim().toLowerCase().startsWith("<html")
+    ) {
+        throw new Error("Se recibió una página web en lugar de las preguntas");
+    }
+
+    return preguntasTxt.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
 }
 
-window.onload = function() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const archivo = urlParams.get('preguntas');
-  
-  if (archivo) {
-    if (archivo === "SDSFULL") {
-      // Caso especial para SDSFULL
-      const archivos = JSON.parse(sessionStorage.getItem("sdsfullArchivos") || "[]");
-      
-      if (archivos.length > 0) {
-        // Cargar y procesar todos los archivos SDS
-        cargarMultiplesArchivos(archivos).then((preguntas) => {
-          const resumenContainer = document.getElementById('app');
-          preguntas.forEach((pregunta, index) => {
-            const preguntaElement = document.createElement('p');
-            preguntaElement.textContent = (index + 1) + '. ' + pregunta.pregunta;
-            resumenContainer.appendChild(preguntaElement);
-            
-            const respuestaElement = document.createElement('span');
-            respuestaElement.textContent = 'Respuesta correcta: ' + pregunta.opciones[pregunta.respuesta - 1];
-            respuestaElement.className = 'correct';
-            resumenContainer.appendChild(respuestaElement);
-          });
-        });
-      }
-    } else {
-      cargarPreguntas(archivo).then(preguntasTxt => {
-        const preguntas = preguntasTxt.split(/\n{2,}/).map((preguntaTxt) => {
-          const [pregunta, respuesta, ...opciones] = preguntaTxt.split("\n");
-          const opcionesMezcladas = shuffleArray([...opciones]);
-          const respuestaMezclada = opcionesMezcladas.indexOf(opciones[respuesta - 1]) + 1;
-          return { pregunta, respuesta: respuestaMezclada, opciones: opcionesMezcladas };
-        });
-        
-        const resumenContainer = document.getElementById('app');
-        preguntas.forEach((pregunta, index) => {
-          const preguntaElement = document.createElement('p');
-          preguntaElement.textContent = (index + 1) + '. ' + pregunta.pregunta;
-          resumenContainer.appendChild(preguntaElement);
+// --- ARRANQUE PRINCIPAL ---
+window.onload = function () {
+    cargarTemaGuardado(); // Aplicamos el tema (claro/oscuro) nada más entrar
 
-          const respuestaElement = document.createElement('span');
-          respuestaElement.textContent = 'Respuesta correcta: ' + pregunta.opciones[pregunta.respuesta - 1];
-          respuestaElement.className = 'correct'; 
-          resumenContainer.appendChild(respuestaElement);
-        });
-      });
+    // 1. Leemos la URL (ejemplo: "/sdsfull/resumen")
+    const path = window.location.pathname;
+
+    // Dividimos la URL por las barras y quitamos espacios vacíos. Nos quedamos con el primer trozo.
+    // Ej: ["sdsfull", "resumen"] -> Nos quedamos con "sdsfull"
+    const pathParts = path.split("/").filter((p) => p);
+
+    if (pathParts.length > 0) {
+        const asignaturaId = pathParts[0];
+        cargarResumenDesdeId(asignaturaId);
     }
-  }
 };
 
-async function cargarMultiplesArchivos(archivos) {
-  let todasLasPreguntas = [];
-  
-  for (const archivo of archivos) {
-    try {
-      const preguntasTxt = await cargarPreguntas(archivo);
-      const preguntasDelArchivo = preguntasTxt.split(/\n{2,}/).map((preguntaTxt) => {
-        const [pregunta, respuesta, ...opciones] = preguntaTxt.split("\n");
-        const respuestasNum = parseInt(respuesta);
-        const opcionesMezcladas = shuffleArray([...opciones]);
-        const respuestaMezclada = opcionesMezcladas.indexOf(opciones[respuestasNum - 1]) + 1;
-        return { pregunta, respuesta: respuestaMezclada, opciones: opcionesMezcladas };
-      });
-      
-      todasLasPreguntas = todasLasPreguntas.concat(preguntasDelArchivo);
-    } catch (error) {
-      console.error(`Error cargando el archivo ${archivo}:`, error);
+// --- CEREBRO PARA CARGAR LA ASIGNATURA ---
+function cargarResumenDesdeId(id) {
+    let archivosACargar = [];
+    let esMultiple = false;
+
+    // Detectamos si es un examen especial con múltiples archivos
+    if (id === "redes_full") {
+        esMultiple = true;
+        archivosACargar = [
+            "redesPreguntas.txt",
+            "redesEnero2324Preguntas.txt",
+            "redesEnero2425Preguntas.txt",
+            "redesJulio2425Preguntas.txt",
+            "redesEnero2526Preguntas.txt",
+        ];
+    } else if (id === "sdsfull") {
+        esMultiple = true;
+        archivosACargar = JSON.parse(sessionStorage.getItem("sdsfullArchivos") || "[]");
+        // Por si alguien entra directo a la URL sin pasar por el menú
+        if (archivosACargar.length === 0) {
+            archivosACargar = [
+                "sds01-presentacionPreguntas.txt",
+                "sds02-introgoPreguntas.txt",
+                "sds03-introcriptoPreguntas.txt",
+                "sds04-aleatoriosPreguntas.txt",
+                "sds05-flujoPreguntas.txt",
+                "sds06-bloquePreguntas.txt",
+                "sds07-hashPreguntas.txt",
+                "sds08-publicaPreguntas.txt",
+                "sds09-transportePreguntas.txt",
+                "sds10-ejerciciosPreguntas.txt",
+                "sds11-malwarePreguntas.txt",
+                "sds12-ataquesPreguntas.txt",
+                "sds13-wirelessPreguntas.txt",
+                "sds14-recomendacionesPreguntas.txt",
+            ];
+        }
     }
-  }
-  
-  return todasLasPreguntas;
+
+    if (esMultiple) {
+        cargarMultiplesArchivos(archivosACargar).then((preguntas) => renderizarResumen(preguntas));
+    } else {
+        // Excepciones de nombres de archivos
+        const excepciones = {
+            "dca-oficial": "dcaPreguntas.txt",
+            "ic-p1": "ic-p1.txt",
+            "taes-definitivo": "taesDefinitivoPreguntas.txt",
+        };
+        const archivo = excepciones[id] ? excepciones[id] : id + "Preguntas.txt";
+
+        cargarPreguntas(archivo)
+            .then((preguntasTxt) => renderizarResumen(procesarTextoPreguntas(preguntasTxt)))
+            .catch((error) => {
+                console.warn("Error cargando el resumen:", error);
+                document.getElementById("app").innerHTML =
+                    "<h1>Error: No se encontró el resumen para esta asignatura.</h1>";
+            });
+    }
 }
 
+// --- PROCESAMIENTO DE TEXTO ---
+function procesarTextoPreguntas(preguntasTxt) {
+    return preguntasTxt.split(/\n{2,}/).map((preguntaTxt) => {
+        const [pregunta, respuesta, ...opciones] = preguntaTxt.split("\n");
 
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+        // Soportamos múltiples respuestas correctas (ej: "1, 3")
+        const respuestasCorrectasIndices = respuesta.split(",").map((r) => parseInt(r.trim()));
+
+        // Extraemos el texto exacto de las opciones correctas
+        const textosRespuestas = respuestasCorrectasIndices.map((index) => opciones[index - 1]);
+
+        return {
+            pregunta: pregunta,
+            respuestasText: textosRespuestas.join(" | "), // Las unimos con una barra
+        };
+    });
 }
 
+// --- CARGA MÚLTIPLE ---
+async function cargarMultiplesArchivos(archivos) {
+    let todasLasPreguntas = [];
+    for (const archivo of archivos) {
+        try {
+            const preguntasTxt = await cargarPreguntas(archivo);
+            todasLasPreguntas = todasLasPreguntas.concat(procesarTextoPreguntas(preguntasTxt));
+        } catch (error) {
+            console.error(`Error cargando el archivo ${archivo}:`, error);
+        }
+    }
+    return todasLasPreguntas;
+}
+
+// --- PINTAR EL RESUMEN EN LA PÁGINA ---
+function renderizarResumen(preguntas) {
+    const resumenContainer = document.getElementById("resumen");
+    resumenContainer.innerHTML = ""; // Limpiamos por si acaso
+
+    preguntas.forEach((pregunta, index) => {
+        const preguntaElement = document.createElement("p");
+        preguntaElement.innerHTML = `<strong>${index + 1}.</strong> ${pregunta.pregunta}`;
+        resumenContainer.appendChild(preguntaElement);
+
+        const respuestaElement = document.createElement("span");
+        respuestaElement.textContent = "Respuesta correcta: " + pregunta.respuestasText;
+        respuestaElement.className = "correct";
+        resumenContainer.appendChild(respuestaElement);
+
+        resumenContainer.appendChild(document.createElement("br"));
+        resumenContainer.appendChild(document.createElement("br"));
+    });
+}
+
+// --- TEMA OSCURO / CLARO ---
 function toggleTheme() {
-  const themeToggle = document.getElementById("theme-toggle");
-  const body = document.querySelector("body");
+    const themeToggle = document.getElementById("theme-toggle");
+    const body = document.querySelector("body");
 
-  if (body.classList.contains("dark-theme")) {
-    body.classList.remove("dark-theme");
-    themeToggle.innerHTML = "&#9728;"; // Sol
-    themeToggle.classList.remove("dark-mode");
-    themeToggle.classList.add("light-mode");
-  } else {
-    body.classList.add("dark-theme");
-    themeToggle.innerHTML = "&#9790;"; // Luna
-    themeToggle.classList.remove("light-mode");
-    themeToggle.classList.add("dark-mode");
-  }
+    if (body.classList.contains("dark-theme")) {
+        body.classList.remove("dark-theme");
+        if (themeToggle) {
+            themeToggle.innerHTML = "&#9728;";
+            themeToggle.classList.remove("dark-mode");
+            themeToggle.classList.add("light-mode");
+        }
+        localStorage.setItem("theme", "light");
+    } else {
+        body.classList.add("dark-theme");
+        if (themeToggle) {
+            themeToggle.innerHTML = "&#9790;";
+            themeToggle.classList.remove("light-mode");
+            themeToggle.classList.add("dark-mode");
+        }
+        localStorage.setItem("theme", "dark");
+    }
 }
 
-document.getElementById("theme-toggle").addEventListener("click", toggleTheme);
+const themeBtn = document.getElementById("theme-toggle");
+if (themeBtn) {
+    themeBtn.addEventListener("click", toggleTheme);
+}
+
+function cargarTemaGuardado() {
+    const savedTheme = localStorage.getItem("theme");
+    const themeToggle = document.getElementById("theme-toggle");
+    const body = document.querySelector("body");
+
+    if (savedTheme === "dark") {
+        body.classList.add("dark-theme");
+        if (themeToggle) {
+            themeToggle.innerHTML = "&#9790;";
+            themeToggle.classList.remove("light-mode");
+            themeToggle.classList.add("dark-mode");
+        }
+    }
+}
