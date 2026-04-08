@@ -71,7 +71,7 @@ Si $$f1(n) \in{ Ο(g1(n))}$$ y $$f2(n) \in{ Ο(g2(n))}$$ entonces:
 - Ambas son correctas 
 
 Un algoritmo cuya talla es n y que tarda $$40^n$$ segundos en resolver cualquier instancia tiene una complejidad temporal:
-2
+3
 - $$\Theta{( n^n )}$$
 - $$\Theta{( 4^n )}$$
 - Ninguna de las anteriores
@@ -257,7 +257,7 @@ Un programa con dos bucles anidados uno dentro del otro, El primero hace $$n$$ i
 - $$O(n \sqrt{n})$$
 
 Un problema de tamaño $$n$$ puede transformarse en tiempo $$O(\frac{n}{2})$$ en nueve de tamaño $$\frac{n}{3}$$; por otro lado, la solución al problema cuando la talla es 1 requiere un tiempo constante. ¿Cuál de estas clases de coste temporal asintótico es la más ajustada?
-2
+3
 - $$O(n \log n)$$
 - $$O(n^2 \log n)$$
 - $$O(n^2)$$
@@ -275,7 +275,7 @@ Los algoritmos de ordenación Quicksort y Mergesort tienen en común ...
 - ... que aplican la estrategia de divide y vencerás.
 
 Indica cuál es la complejidad de la función siguiente:```unsigned sum( const mat &A ) {    # A es una matriz cuadrada \n\tunsigned d = A.n_rows(); \n\tunsigned a = 0; \n\tfor( unsigned i = 0; i < d; i++ ) \n\t\tfor( unsigned j = 0; j < d; j++ ) \n\t\t\ta += A(i,j); \n\treturn a; \n}```
-2
+1
 - $$O(n^2)$$
 - $$O(n)$$
 - $$O(n \log n)$$
@@ -389,7 +389,7 @@ Sea $$ f(n) = n \log(n) + n $$.
 - Las otras dos opciones son ciertas
 
 ¿Cuál es la complejidad temporal de la siguiente función?```int ejemplo (vector < int > & v){ \n\tint n=v.size(); \n\tint j,i=2; \n\tint sum=0; \n\twhile (n>0 && i<n){ \n\t\tj=i; \n\t\twhile (v[j] != v[1]){ \n\t\t\tsum+=v[j]; \n\t\t\tj=j/2; \n\t\t} \n\t\ti++; \n\t} \n\treturn sum; \n}```
-1
+3
 - $$ \Theta(n \log n) $$
 - $$ \Theta(n^2) $$
 - $$ \Omega(n) $$
@@ -449,7 +449,7 @@ Si $$ f \in \Omega(g_1) $$ y $$ f \in \Omega(g_2) $$ entonces
 - $$ f \in \Omega(g_1 + g_2) $$
 
 ¿Cuál de las siguientes relaciones de recurrencia expresa mejor la complejidad espacial es la del algoritmo Mergesort?
-3
+2
 - $$ T(n) = n + T(n - 1) \space\space$$ para $$\space\space n > 1 \space\space$$ y $$\space\space T(n) \space = \space\space\space\space\space\space\space 1 \space\space$$ para $$\space\space n \leq \space\space 1 $$
 - $$ T(n) = n + T(n/2) \space\space$$ para $$\space\space n > 1 \space\space$$ y $$\space\space T(n) \space = \space\space\space\space\space\space\space 1 \space\space$$ para $$\space\space n \leq \space\space 1 $$
 - $$ T(n) = n + 2T(n/2) \space\space$$ para $$\space\space n > 1 \space\space$$ y $$\space\space T(n) \space\ = \space\space\space\space\space\space\space 1 \space\space$$ para $$\space\space n \leq \space\space 1 $$
@@ -461,7 +461,7 @@ De las siguientes expresiones, o bien dos son verdaderas y una es falsa, o bien 
 - $$ \Theta(\log_2(n)) = \Theta(\log_3(n)) $$
 
 Un problema de tamaño $$ n $$ puede transformarse en tiempo $$ O(1) $$ en siete de tamaño $$ \frac{n}{7} $$; por otro lado, la solución al problema cuando la talla es 1 requiere un tiempo constante. \n¿Cuál de estas clases de coste temporal asintótico es la más ajustada?
-3
+2
 - $$ O(n^2) $$
 - $$ O(n) $$
 - $$ O(n \log n) $$
@@ -611,7 +611,7 @@ $$ O(1) $$
 $$ O(x^2) $$
 
 iCual de los siguientes pares de problemas son equivalentes en cuanto al tipo de solucian (Optima, factible, etc.) aportada por el método voraz? \nSeleccione una:
-3
+1
 La mochila continua y la asignación de tareas.
 El fontanero diligente y el problema del cambio.
 La mochila discreta y la asignación de tareas.
